@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DA_BlagodatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="Client_s_code" />
+    </Key>
+    <Property Name="Full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Client_s_code" Type="Int32" Nullable="false" />
+    <Property Name="Passport_data" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Birthday" Type="DateTime" Precision="0" />
+    <Property Name="Adress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="E_mail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Employee_s_code" />
+    </Key>
+    <Property Name="Employee_s_code" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Post" Type="Int32" />
+    <Property Name="Full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Last_entry" Type="DateTime" Precision="3" />
+    <Property Name="Type_entry" Type="Int32" />
+    <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ID_Post" Relationship="Self.FK_Employee_ID_Post" FromRole="Employee" ToRole="ID_Post" />
+    <NavigationProperty Name="Type_entryID" Relationship="Self.FK_Employee_Type_entryID" FromRole="Employee" ToRole="Type_entryID" />
+  </EntityType>
+  <EntityType Name="ID_Post">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Post" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_ID_Post" FromRole="ID_Post" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Order_s_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Date_of_creation" Type="DateTime" Precision="0" />
+    <Property Name="Order_time" Type="Time" Precision="7" />
+    <Property Name="Client_s_code" Type="Int32" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="Closing_date" Type="DateTime" Precision="0" />
+    <Property Name="Rental_time" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="OrderStatus" Relationship="Self.FK_Order_OrderStatus" FromRole="Order" ToRole="OrderStatus" />
+    <NavigationProperty Name="Services" Relationship="Self.Order_services" FromRole="Order" ToRole="Services" />
+  </EntityType>
+  <EntityType Name="OrderStatus">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Order" Relationship="Self.FK_Order_OrderStatus" FromRole="OrderStatus" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Services">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Name_of_the_service" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Service_s_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Cost" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="Order" Relationship="Self.Order_services" FromRole="Services" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Type_entryID">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Type_entry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_Type_entryID" FromRole="Type_entryID" ToRole="Employee" />
+  </EntityType>
+  <Association Name="FK_Employee_ID_Post">
+    <End Role="ID_Post" Type="Self.ID_Post" Multiplicity="0..1" />
+    <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ID_Post">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="Post" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Employee_Type_entryID">
+    <End Role="Type_entryID" Type="Self.Type_entryID" Multiplicity="0..1" />
+    <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type_entryID">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="Type_entry" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_OrderStatus">
+    <End Role="OrderStatus" Type="Self.OrderStatus" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrderStatus">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="Status" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Order_services">
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <End Role="Services" Type="Self.Services" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="DA_BlagodatEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Clients" EntityType="Self.Clients" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" />
+    <EntitySet Name="ID_Post" EntityType="Self.ID_Post" />
+    <EntitySet Name="Order" EntityType="Self.Order" />
+    <EntitySet Name="OrderStatus" EntityType="Self.OrderStatus" />
+    <EntitySet Name="Services" EntityType="Self.Services" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Type_entryID" EntityType="Self.Type_entryID" />
+    <AssociationSet Name="FK_Employee_ID_Post" Association="Self.FK_Employee_ID_Post">
+      <End Role="ID_Post" EntitySet="ID_Post" />
+      <End Role="Employee" EntitySet="Employee" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Employee_Type_entryID" Association="Self.FK_Employee_Type_entryID">
+      <End Role="Type_entryID" EntitySet="Type_entryID" />
+      <End Role="Employee" EntitySet="Employee" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_OrderStatus" Association="Self.FK_Order_OrderStatus">
+      <End Role="OrderStatus" EntitySet="OrderStatus" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <AssociationSet Name="Order_services" Association="Self.Order_services">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="Services" EntitySet="Services" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

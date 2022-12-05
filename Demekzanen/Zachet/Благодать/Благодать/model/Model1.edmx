@@ -1,0 +1,465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище DA_BlagodatModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="Client's code" />
+          </Key>
+          <Property Name="Full name" Type="varchar" MaxLength="100" />
+          <Property Name="Client's code" Type="int" Nullable="false" />
+          <Property Name="Passport data" Type="varchar" MaxLength="100" />
+          <Property Name="Birthday" Type="date" />
+          <Property Name="Adress" Type="varchar" MaxLength="100" />
+          <Property Name="E-mail" Type="varchar" MaxLength="100" />
+          <Property Name="Password" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Employee's code" />
+          </Key>
+          <Property Name="Employee's code" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="Post" Type="int" />
+          <Property Name="Full name" Type="varchar" MaxLength="100" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Password" Type="varchar" MaxLength="100" />
+          <Property Name="Last entry" Type="datetime" />
+          <Property Name="Type entry" Type="int" />
+          <Property Name="photo" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ID_Post">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Post" Type="nchar" MaxLength="20" />
+          <Property Name="ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Order's code" Type="varchar" MaxLength="20" />
+          <Property Name="Date of creation" Type="date" />
+          <Property Name="Order time" Type="time" Precision="7" />
+          <Property Name="Client's code" Type="int" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Closing date" Type="date" />
+          <Property Name="Rental time" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Order services">
+          <Key>
+            <PropertyRef Name="ID orders" />
+            <PropertyRef Name="ID services" />
+          </Key>
+          <Property Name="ID orders" Type="int" Nullable="false" />
+          <Property Name="ID services" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Status" Type="nchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name of the service" Type="varchar" MaxLength="100" />
+          <Property Name="Service's code" Type="varchar" MaxLength="50" />
+          <Property Name="Cost" Type="money" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Type entryID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Type entry" Type="varchar" MaxLength="50" />
+          <Property Name="ID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Employee_ID_Post">
+          <End Role="ID_Post" Type="Self.ID_Post" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ID_Post">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="Post" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Type entryID">
+          <End Role="Type entryID" Type="Self.Type entryID" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type entryID">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="Type entry" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order services_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Order services" Type="Self.Order services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order services">
+              <PropertyRef Name="ID orders" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order services_Services">
+          <End Role="Services" Type="Self.Services" Multiplicity="1" />
+          <End Role="Order services" Type="Self.Order services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order services">
+              <PropertyRef Name="ID services" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_OrderStatus">
+          <End Role="OrderStatus" Type="Self.OrderStatus" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderStatus">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище DA_BlagodatModelContainer">
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ID_Post" EntityType="Self.ID_Post" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order services" EntityType="Self.Order services" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderStatus" EntityType="Self.OrderStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Services" EntityType="Self.Services" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Type entryID" EntityType="Self.Type entryID" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_ID_Post" Association="Self.FK_Employee_ID_Post">
+            <End Role="ID_Post" EntitySet="ID_Post" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Type entryID" Association="Self.FK_Employee_Type entryID">
+            <End Role="Type entryID" EntitySet="Type entryID" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order services_Order" Association="Self.FK_Order services_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Order services" EntitySet="Order services" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order services_Services" Association="Self.FK_Order services_Services">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="Order services" EntitySet="Order services" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_OrderStatus" Association="Self.FK_Order_OrderStatus">
+            <End Role="OrderStatus" EntitySet="OrderStatus" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DA_BlagodatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="Client_s_code" />
+          </Key>
+          <Property Name="Full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Client_s_code" Type="Int32" Nullable="false" />
+          <Property Name="Passport_data" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Birthday" Type="DateTime" Precision="0" />
+          <Property Name="Adress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="E_mail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Employee_s_code" />
+          </Key>
+          <Property Name="Employee_s_code" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Post" Type="Int32" />
+          <Property Name="Full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Last_entry" Type="DateTime" Precision="3" />
+          <Property Name="Type_entry" Type="Int32" />
+          <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ID_Post" Relationship="Self.FK_Employee_ID_Post" FromRole="Employee" ToRole="ID_Post" />
+          <NavigationProperty Name="Type_entryID" Relationship="Self.FK_Employee_Type_entryID" FromRole="Employee" ToRole="Type_entryID" />
+        </EntityType>
+        <EntityType Name="ID_Post">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Post" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_ID_Post" FromRole="ID_Post" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Order_s_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Date_of_creation" Type="DateTime" Precision="0" />
+          <Property Name="Order_time" Type="Time" Precision="7" />
+          <Property Name="Client_s_code" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Closing_date" Type="DateTime" Precision="0" />
+          <Property Name="Rental_time" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OrderStatus" Relationship="Self.FK_Order_OrderStatus" FromRole="Order" ToRole="OrderStatus" />
+          <NavigationProperty Name="Services" Relationship="Self.Order_services" FromRole="Order" ToRole="Services" />
+        </EntityType>
+        <EntityType Name="OrderStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_OrderStatus" FromRole="OrderStatus" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name_of_the_service" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Service_s_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cost" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Order" Relationship="Self.Order_services" FromRole="Services" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Type_entryID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Type_entry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_Type_entryID" FromRole="Type_entryID" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Employee_ID_Post">
+          <End Role="ID_Post" Type="Self.ID_Post" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ID_Post">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="Post" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Type_entryID">
+          <End Role="Type_entryID" Type="Self.Type_entryID" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type_entryID">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="Type_entry" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_OrderStatus">
+          <End Role="OrderStatus" Type="Self.OrderStatus" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderStatus">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Order_services">
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <End Role="Services" Type="Self.Services" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="DA_BlagodatEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Clients" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" />
+          <EntitySet Name="ID_Post" EntityType="Self.ID_Post" />
+          <EntitySet Name="Order" EntityType="Self.Order" />
+          <EntitySet Name="OrderStatus" EntityType="Self.OrderStatus" />
+          <EntitySet Name="Services" EntityType="Self.Services" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Type_entryID" EntityType="Self.Type_entryID" />
+          <AssociationSet Name="FK_Employee_ID_Post" Association="Self.FK_Employee_ID_Post">
+            <End Role="ID_Post" EntitySet="ID_Post" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Type_entryID" Association="Self.FK_Employee_Type_entryID">
+            <End Role="Type_entryID" EntitySet="Type_entryID" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_OrderStatus" Association="Self.FK_Order_OrderStatus">
+            <End Role="OrderStatus" EntitySet="OrderStatus" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="Order_services" Association="Self.Order_services">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Services" EntitySet="Services" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище DA_BlagodatModelContainer" CdmEntityContainer="DA_BlagodatEntities1">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="DA_BlagodatModel.Clients">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="Full_name" ColumnName="Full name" />
+                <ScalarProperty Name="Client_s_code" ColumnName="Client's code" />
+                <ScalarProperty Name="Passport_data" ColumnName="Passport data" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Adress" ColumnName="Adress" />
+                <ScalarProperty Name="E_mail" ColumnName="E-mail" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="DA_BlagodatModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Employee_s_code" ColumnName="Employee's code" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="Full_name" ColumnName="Full name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Last_entry" ColumnName="Last entry" />
+                <ScalarProperty Name="Type_entry" ColumnName="Type entry" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ID_Post">
+            <EntityTypeMapping TypeName="DA_BlagodatModel.ID_Post">
+              <MappingFragment StoreEntitySet="ID_Post">
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="DA_BlagodatModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Order_s_code" ColumnName="Order's code" />
+                <ScalarProperty Name="Date_of_creation" ColumnName="Date of creation" />
+                <ScalarProperty Name="Order_time" ColumnName="Order time" />
+                <ScalarProperty Name="Client_s_code" ColumnName="Client's code" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Closing_date" ColumnName="Closing date" />
+                <ScalarProperty Name="Rental_time" ColumnName="Rental time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderStatus">
+            <EntityTypeMapping TypeName="DA_BlagodatModel.OrderStatus">
+              <MappingFragment StoreEntitySet="OrderStatus">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="DA_BlagodatModel.Services">
+              <MappingFragment StoreEntitySet="Services">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name_of_the_service" ColumnName="Name of the service" />
+                <ScalarProperty Name="Service_s_code" ColumnName="Service's code" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DA_BlagodatModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Type_entryID">
+            <EntityTypeMapping TypeName="DA_BlagodatModel.Type_entryID">
+              <MappingFragment StoreEntitySet="Type entryID">
+                <ScalarProperty Name="Type_entry" ColumnName="Type entry" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Order_services" TypeName="DA_BlagodatModel.Order_services" StoreEntitySet="Order services">
+            <EndProperty Name="Order">
+              <ScalarProperty Name="ID" ColumnName="ID orders" />
+            </EndProperty>
+            <EndProperty Name="Services">
+              <ScalarProperty Name="ID" ColumnName="ID services" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

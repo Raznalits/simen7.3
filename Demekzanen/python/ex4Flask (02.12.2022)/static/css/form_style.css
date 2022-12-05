@@ -1,0 +1,31 @@
+body{
+    margin: 0 auto;
+    padding: 2% 0 0 5%;
+}
+form {
+    width: 30%;
+}
+form input{
+    margin-bottom: 10px;
+}
+#id {
+    width: 100px;
+}
+#bdate{
+    width: 160px;
+}
+button {
+
+    padding: 12px 20px;
+    margin: 4px 0;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 12pt;
+    background-color: #fff;
+    border-color: #D3D3D3;
+    }
+button:hover {
+    color: #ffffff;
+    background-color: #7700ff;
+    outline: 0;
+}

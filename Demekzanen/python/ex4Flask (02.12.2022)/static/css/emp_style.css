@@ -1,0 +1,32 @@
+table {
+	width: 80%;
+	margin-bottom: 20px;
+	border: 1px solid #dddddd;
+	border-collapse: collapse;
+	font-size:16pt;
+}
+table th {
+	font-weight: bold;
+	padding: 5px;
+	background: #efefef;
+	border: 1px solid #dddddd;
+}
+table td {
+	border: 1px solid #dddddd;
+	padding: 5px;
+}
+button {
+
+    padding: 12px 20px;
+    margin: 4px 0;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 12pt;
+    background-color: #fff;
+    border-color: #D3D3D3;
+    }
+button:hover {
+    color: #ffffff;
+    background-color: #7700ff;
+    outline: 0;
+}

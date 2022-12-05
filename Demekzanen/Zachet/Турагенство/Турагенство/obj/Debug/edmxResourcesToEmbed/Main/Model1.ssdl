@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище DA_1Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6013: Первичный ключ в таблице или представлении "195DA_1.dbo.Client" не определен, его не удалось вывести. Эта таблица или представление исключены. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+        <EntityType Name="Client">
+          <Property Name="Code" Type="varchar" MaxLength="6" />
+          <Property Name="LastName" Type="varchar" MaxLength="100" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="Patronimic" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="char" MaxLength="1" />
+          <Property Name="Phone" Type="varchar" MaxLength="20" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6013: Первичный ключ в таблице или представлении "195DA_1.dbo.Country" не определен, его не удалось вывести. Эта таблица или представление исключены. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+        <EntityType Name="Country">
+          <Property Name="Code" Type="varchar" MaxLength="3" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="Flag" Type="binary" MaxLength="50" />
+        </EntityType>-->
+  <EntityType Name="HotelPhoto">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Preview" Type="binary" MaxLength="50" />
+    <Property Name="PhotoPath" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6013: Первичный ключ в таблице или представлении "195DA_1.dbo.name" не определен, его не удалось вывести. Эта таблица или представление исключены. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+        <EntityType Name="name">
+          <Property Name="ID" Type="int" />
+          <Property Name="name" Type="nchar" MaxLength="10" />
+          <Property Name="Post" Type="nchar" MaxLength="10" />
+          <Property Name="Password" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+  <EntityType Name="Service">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="200" />
+    <Property Name="PartnerID" Type="int" />
+    <Property Name="HotelID" Type="int" />
+    <Property Name="Price" Type="decimal" Precision="10" Scale="2" />
+  </EntityType>
+  <EntityType Name="ServiceByTour">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="ServiceID" Type="int" />
+    <Property Name="IsControl" Type="char" MaxLength="1" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_Service_HotelPhoto">
+    <End Role="HotelPhoto" Type="Self.HotelPhoto" Multiplicity="0..1" />
+    <End Role="Service" Type="Self.Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HotelPhoto">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Service">
+        <PropertyRef Name="HotelID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ServiceByTour_Service">
+    <End Role="Service" Type="Self.Service" Multiplicity="0..1" />
+    <End Role="ServiceByTour" Type="Self.ServiceByTour" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ServiceByTour">
+        <PropertyRef Name="ServiceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище DA_1ModelContainer">
+    <EntitySet Name="HotelPhoto" EntityType="Self.HotelPhoto" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Service" EntityType="Self.Service" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ServiceByTour" EntityType="Self.ServiceByTour" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Service_HotelPhoto" Association="Self.FK_Service_HotelPhoto">
+      <End Role="HotelPhoto" EntitySet="HotelPhoto" />
+      <End Role="Service" EntitySet="Service" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ServiceByTour_Service" Association="Self.FK_ServiceByTour_Service">
+      <End Role="Service" EntitySet="Service" />
+      <End Role="ServiceByTour" EntitySet="ServiceByTour" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
